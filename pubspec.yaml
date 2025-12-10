@@ -1,0 +1,92 @@
+name: subefit
+description: Aplicación de fitness Subefit
+publish_to: "none"
+
+environment:
+  sdk: ">=3.4.0 <4.0.0"
+
+dependencies:
+  flutter:
+    sdk: flutter
+
+  # For Text-to-Speech
+  flutter_tts: ^3.8.5
+
+  # For haptic feedback
+  vibration: ^1.8.4
+
+  # For animations
+  flutter_animate: ^4.5.0
+
+  # For Lottie animations
+  lottie: ^3.1.2
+
+  # For network requests (used in rutinas_ia_screen)
+  http: ^1.2.1
+
+  # Otras dependencias comunes
+  provider: ^6.1.5
+  async: ^2.11.0
+  uuid: ^4.4.0 # Para generar IDs únicos
+  
+  # Para audio
+  just_audio: ^0.9.36
+  
+  # Para seleccionar imágenes
+  image_picker: ^1.1.2 # O la versión más reciente
+
+  # Para login con Google
+  google_sign_in: ^6.2.1
+
+  # Para GPS y permisos
+  geolocator: ^12.0.0
+  permission_handler: ^11.3.1
+
+  # Para mostrar el mapa de Google
+  google_maps_flutter: ^2.6.1
+  connectivity_plus: ^6.0.3 # Para verificar la conexión a internet
+
+  # Para mostrar el mapa de OpenStreetMap (mejor para web)
+  flutter_map: ^6.1.0
+  latlong2: ^0.9.0
+  flutter_map_cancellable_tile_provider: ^2.0.0
+
+  # Para almacenamiento local simple
+  shared_preferences: ^2.2.3
+  firebase_core: ^3.15.2 # Versión actualizada
+
+  # Para internacionalización y formato de fechas
+  intl: ^0.19.0
+  firebase_auth: ^5.7.0 # Versión actualizada
+  cloud_firestore: ^5.6.12 # Añadido para Firestore
+  firebase_storage: ^12.4.10 # Añadido para subir archivos
+  
+  # Para campos de entrada de PIN/OTP
+  pinput: ^4.0.0
+  
+  # Para campos de entrada de teléfono internacional
+  intl_phone_field: ^3.2.0
+
+  # Para indicador de página en Onboarding
+  smooth_page_indicator: ^1.1.0
+
+  # Para el indicador de progreso en el wizard
+  step_progress_indicator: 1.0.2
+
+  # Para el calendario en la pantalla de progreso
+  table_calendar: ^3.1.0
+
+  # Para formato de fecha relativo (ej. "hace 5 minutos")
+  timeago: ^3.6.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^2.0.3
+
+flutter:
+  uses-material-design: true
+
+  assets:
+    - assets/images/ # Incluye todas las imágenes de la carpeta
+    - assets/exercises/ # Imágenes de ejercicios (3 por ejercicio)

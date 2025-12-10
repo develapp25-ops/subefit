@@ -1,0 +1,121 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // =====================================================================
+    // Colección: Usuarios
+    // Almacena los perfiles de todos los usuarios.
+    // =====================================================================
+    match /Usuarios/{userId} {
+      // LECTURA (get):
+      // - Permite leer un perfil si es público.
+      // - O si el usuario autenticado está solicitando su propio perfil.
+      allow get: if resource.data.publico == true || request.auth.uid == userId;
+
+      // LECTURA (list):
+      // - Se permite a CUALQUIERA (autenticado o no) realizar consultas.
+      // - ESTO ES CRUCIAL para la función de "iniciar sesión con nombre de usuario",
+      //   ya que la app necesita buscar el email ANTES de que el usuario inicie sesión.
+      allow list: if true;
+
+      // ESCRITURA (create, update):
+      // - Un usuario solo puede escribir en su propio documento.
+      // - Se permite la creación (cuando el documento no existe).
+      // - Se permite la actualización, pero se protegen los contadores para que no se puedan
+      //   modificar directamente desde el cliente, solo a través de transacciones seguras.
+      allow create: if request.auth.uid == userId;
+      allow update: if request.auth.uid == userId &&
+                       (request.resource.data.seguidores == resource.data.seguidores &&
+                        request.resource.data.seguidos == resource.data.seguidos &&
+                        request.resource.data.publicaciones == resource.data.publicaciones &&
+                        request.resource.data.totalPoints == resource.data.totalPoints &&
+                        request.resource.data.level == resource.data.level
+                       );
+
+      // BORRADO:
+      // - Por seguridad, no se permite borrar perfiles desde el cliente.
+      allow delete: if false;
+    }
+
+    // =====================================================================
+    // Colección: Publicacion
+    // Almacena todas las publicaciones de los usuarios.
+    // =====================================================================
+    match /Publicacion/{postId} {
+      // LECTURA (get):
+      // - Permite leer una publicación específica si es pública.
+      allow get: if resource.data.publico == true;
+
+      // LECTURA (list):
+      // - Permite a usuarios autenticados listar publicaciones.
+      // - Necesario para el feed (donde se filtra por 'autorID' o 'publico') y para
+      //   la vista de perfil de otro usuario (donde se filtra por 'autorID' y 'publico').
+      allow list: if request.auth != null;
+
+      // CREACIÓN:
+      // - Permite crear si el usuario está autenticado y es el autor de la publicación.
+      allow create: if request.auth != null && request.resource.data.autorID == request.auth.uid;
+
+      // ACTUALIZACIÓN y BORRADO:
+      // - Permite actualizar o borrar solo si el usuario es el autor original.
+      // - Se protege el contador de likes para que solo se modifique con la transacción 'toggleLike'.
+      // - Se protege el contador de comentarios para que solo se modifique con una transacción.
+      allow update: if request.auth.uid == resource.data.autorID &&
+                       request.resource.data.likes == resource.data.likes &&
+                       request.resource.data.comentarios == resource.data.comentarios;
+      allow delete: if request.auth.uid == resource.data.autorID;
+
+      // --- Subcolección de Likes ---
+      match /likes/{userId} {
+        // LECTURA:
+        // - Permite a cualquier usuario autenticado leer los likes (para saber si ya dio like).
+        allow read: if request.auth != null;
+
+        // ESCRITURA y BORRADO:
+        // - Un usuario solo puede crear o borrar su propio like.
+        allow write: if request.auth.uid == userId;
+      }
+
+      // --- Subcolección de Comentarios ---
+      match /Comentarios/{commentId} {
+        // LECTURA:
+        // - Permite a cualquier usuario autenticado leer los comentarios de una publicación.
+        allow read: if request.auth != null;
+
+        // CREACIÓN:
+        // - Un usuario autenticado puede crear un comentario si es el autor del mismo.
+        allow create: if request.auth != null && request.resource.data.autorId == request.auth.uid;
+
+        // ACTUALIZACIÓN:
+        // - No se permite la edición de comentarios desde el cliente por simplicidad.
+        allow update: if false;
+
+        // BORRADO:
+        // - Un usuario solo puede borrar sus propios comentarios.
+        allow delete: if request.auth.uid == resource.data.autorId;
+      }
+    }
+
+    // =====================================================================
+    // Colección: Seguidos
+    // Almacena a quién sigue cada usuario. /Seguidos/{userId}/userFollowing/{targetId}
+    // =====================================================================
+    match /Seguidos/{userId}/userFollowing/{targetId} {
+      // LECTURA, ESCRITURA, BORRADO:
+      // - Un usuario solo puede gestionar su propia lista de personas a las que sigue.
+      // - La lectura es necesaria para que la app pueda determinar a quién sigue el usuario actual.
+      allow read, write: if request.auth.uid == userId;
+    }
+
+    // =====================================================================
+    // Colección: Seguidores
+    // Almacena quién sigue a un usuario. /Seguidores/{userId}/userFollowers/{sourceId}
+    // =====================================================================
+    match /Seguidores/{targetId}/userFollowers/{userId} {
+       // LECTURA, ESCRITURA, BORRADO:
+       // - Un usuario solo puede gestionar su propia entrada en la lista de seguidores de otro.
+       // - Esto es gestionado por la transacción segura 'toggleFollow'.
+       allow read, write: if request.auth.uid == userId;
+    }
+  }
+}

@@ -1,0 +1,68 @@
+{
+  "project_info": {
+    "project_number": "129181335985",
+    "project_id": "subefit-427cc",
+    "storage_bucket": "subefit-427cc.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:129181335985:android:0e140eeb098d2bf9e83d90",
+        "android_client_info": {
+          "package_name": "Sube.fit25_"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "129181335985-iv8id668uf5nbgoojm4f4dhu4gbuu0fg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAC2NEdZlc_no1AUW_lROpHSP-9-ipKL60"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "129181335985-iv8id668uf5nbgoojm4f4dhu4gbuu0fg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:129181335985:android:163bc2ce74682961e83d90",
+        "android_client_info": {
+          "package_name": "com.example.subefit"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "129181335985-iv8id668uf5nbgoojm4f4dhu4gbuu0fg.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAC2NEdZlc_no1AUW_lROpHSP-9-ipKL60"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "129181335985-iv8id668uf5nbgoojm4f4dhu4gbuu0fg.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

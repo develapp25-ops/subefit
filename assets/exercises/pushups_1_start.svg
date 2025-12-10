@@ -1,0 +1,28 @@
+<svg width="300" height="400" viewBox="0 0 300 400" xmlns="http://www.w3.org/2000/svg">
+  <!-- Background -->
+  <rect width="300" height="400" fill="#f5f5f5"/>
+  
+  <!-- Ground -->
+  <line x1="0" y1="350" x2="300" y2="350" stroke="#333" stroke-width="2"/>
+  
+  <!-- Head -->
+  <circle cx="150" cy="100" r="20" fill="#fdbcb4"/>
+  
+  <!-- Body (Extended position) -->
+  <line x1="150" y1="120" x2="150" y2="200" stroke="#333" stroke-width="8" stroke-linecap="round"/>
+  
+  <!-- Left arm (extended) -->
+  <line x1="150" y1="130" x2="80" y2="180" stroke="#333" stroke-width="7" stroke-linecap="round"/>
+  
+  <!-- Right arm (extended) -->
+  <line x1="150" y1="130" x2="220" y2="180" stroke="#333" stroke-width="7" stroke-linecap="round"/>
+  
+  <!-- Left leg (extended) -->
+  <line x1="150" y1="200" x2="120" y2="350" stroke="#333" stroke-width="7" stroke-linecap="round"/>
+  
+  <!-- Right leg (extended) -->
+  <line x1="150" y1="200" x2="180" y2="350" stroke="#333" stroke-width="7" stroke-linecap="round"/>
+  
+  <!-- Label -->
+  <text x="150" y="380" font-size="16" font-weight="bold" text-anchor="middle" fill="#333">Posición Inicial (Arriba)</text>
+</svg>

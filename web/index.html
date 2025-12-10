@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <!-- Agregamos el Client ID para asegurar la compatibilidad con Google Identity Services -->
+  <meta name="google-signin-client_id" content="129181335985-iv8id668uf5nbgoojm4f4dhu4gbuu0fg.apps.googleusercontent.com">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="A new Flutter project.">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="subefit">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <title>subefit</title>
+  <link rel="manifest" href="manifest.json">
+  <!-- Carga la nueva librería de Google Identity Services (GIS) para el login en web -->
+  <!-- El atributo 'onload' nos avisará cuando el script esté listo. -->
+  <script src="https://accounts.google.com/gsi/client" async onload="onGoogleScriptLoad()"></script>
+</head>
+<body>
+  <script src="flutter_bootstrap.js" async></script>
+
+  <script>
+    // --- Solución para la carrera de carga del script de Google ---
+
+    // 1. Creamos una cola para las solicitudes de renderizado de botones que lleguen desde Flutter.
+    let googleClientQueue = [];
+    let isGoogleClientLoaded = false;
+ 
+    // 2. Esta función será llamada por el 'onload' del script de Google cuando esté listo.
+    function onGoogleScriptLoad() {
+      isGoogleClientLoaded = true;
+      // Procesamos todas las solicitudes que estaban en espera.
+      googleClientQueue.forEach(renderRequest => renderGoogleButton(renderRequest));
+    }
+ 
+    // 3. La función que Flutter llamará. En lugar de ejecutar, añade a la cola.
+    window.renderGoogleSignInButton = (div, text, callbackName) => {
+      const renderRequest = { div, text, callbackName };
+      if (isGoogleClientLoaded) {
+        // Si ya cargó, renderizamos inmediatamente.
+        renderGoogleButton(renderRequest);
+      } else {
+        // Si no, lo añadimos a la cola para después.
+        googleClientQueue.push(renderRequest);
+      }
+    };
+ 
+    // 4. La lógica real de renderizado, ahora en una función separada.
+    function renderGoogleButton({ div, text, callbackName }) {
+      google.accounts.id.initialize({
+        client_id: "129181335985-iv8id668uf5nbgoojm4f4dhu4gbuu0fg.apps.googleusercontent.com",
+        // CORRECCIÓN: El callback debe usar el nombre de la función que llega como parámetro.
+        // Antes intentaba llamar a una función literal llamada "parentcallbackName".
+        // Ahora, busca la función en el objeto 'window' usando el string 'callbackName'.
+        callback: (response) => window[callbackName](response),
+      });
+      google.accounts.id.renderButton(div, { theme: "outline", size: "large", text: text });
+    }
+  </script>
+</body>
+</html>
